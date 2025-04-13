@@ -1,0 +1,76 @@
+<div class="players-container">
+  <h2 class="section-title">JUGADORES DISPONIBLES</h2>
+
+  <div class="search-filters">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Buscar jugador..."
+        (input)="onSearchChange($event)"
+        class="search-input"
+      >
+    </div>
+
+    <div class="filter-buttons">
+      <button
+        [class.active]="positionFilter === ''"
+        (click)="onPositionFilterChange('')"
+      >
+        Todos
+      </button>
+      <button
+        [class.active]="positionFilter === '1'"
+        (click)="onPositionFilterChange('1')"
+      >
+        Porteros
+      </button>
+      <button
+        [class.active]="positionFilter === '2'"
+        (click)="onPositionFilterChange('2')"
+      >
+        Defensas
+      </button>
+      <button
+        [class.active]="positionFilter === '3'"
+        (click)="onPositionFilterChange('3')"
+      >
+        Medios
+      </button>
+      <button
+        [class.active]="positionFilter === '4'"
+        (click)="onPositionFilterChange('4')"
+      >
+        Delanteros
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    Cargando jugadores...
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage" class="players-grid">
+    <div *ngFor="let player of filteredPlayers" class="player-card">
+      <div class="player-image">
+        <img [src]="player.images['256x256'] || 'assets/default-player.png'" [alt]="player.nickname">
+      </div>
+      <div class="player-info">
+        <div class="player-name">{{ player.nickname }}</div>
+        <div class="player-team">{{ player.team.name }}</div>
+        <div class="player-stats">
+          <span class="player-position">{{ player.positionId }}</span>
+          <span class="player-price">{{ formatMarketValue(player.marketValue) }}</span>
+          <span class="player-points">{{ player.points }} pts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && filteredPlayers.length === 0" class="no-results">
+    No se encontraron jugadores con los filtros seleccionados.
+  </div>
+</div>
